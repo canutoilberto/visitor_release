@@ -1,6 +1,7 @@
+// formStore.js
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { addVisitor } from "./formUtils";
+import { submitFormToFirestore } from "./formUtils";
 
 export const useFormStore = create(
   persist(
@@ -14,41 +15,30 @@ export const useFormStore = create(
       employeeName: "",
       hostContact: "",
       details: "",
-      setFormData: (field, value) =>
-        set((state) => ({ ...state, [field]: value })),
-      clearFormData: () =>
-        set({
-          email: "",
-          visitorName: "",
-          visitorContact: "",
-          visitDate: "",
-          visitTime: "",
-          company: "",
-          employeeName: "",
-          hostContact: "",
-          details: "",
-        }),
+      setFormData: (field, value) => set({ [field]: value }),
       submitForm: async () => {
-        const state = get();
-        const formData = {
-          email: state.email,
-          visitorName: state.visitorName,
-          visitorContact: state.visitorContact,
-          visitDate: state.visitDate,
-          visitTime: state.visitTime,
-          company: state.company,
-          employeeName: state.employeeName,
-          hostContact: state.hostContact,
-          details: state.details,
-          timestamp: new Date().toISOString(),
-        };
-        await addVisitor(formData);
-        state.clearFormData();
+        try {
+          const formData = {
+            email: get().email,
+            visitorName: get().visitorName,
+            visitorContact: get().visitorContact,
+            visitDate: get().visitDate,
+            visitTime: get().visitTime,
+            company: get().company,
+            employeeName: get().employeeName,
+            hostContact: get().hostContact,
+            details: get().details,
+          };
+          await submitFormToFirestore(formData);
+        } catch (error) {
+          console.error("Erro ao enviar o formulário: ", error);
+          throw new Error("Erro ao enviar o formulário: " + error.message);
+        }
       },
     }),
     {
-      name: "visitor-form",
-      getStorage: () => localStorage,
+      name: "form-storage",
+      storage: typeof window !== "undefined" ? localStorage : undefined,
     }
   )
 );

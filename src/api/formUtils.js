@@ -1,21 +1,13 @@
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-import { firebaseApp } from "./firebaseConfig";
+// formUtils.js
+import { db } from "./firebaseConfig"; // Certifique-se de que o caminho está correto
+import { collection, addDoc } from "firebase/firestore";
 
-const db = getFirestore(firebaseApp);
-
-export const addVisitor = async (visitorData) => {
+export const submitFormToFirestore = async (formData) => {
   try {
-    const docRef = await addDoc(collection(db, "addedVisitors"), {
-      ...visitorData,
-      createdAt: serverTimestamp(),
-    });
-    console.log("Documento criado com ID: ", docRef.id);
+    const docRef = await addDoc(collection(db, "schedules"), formData);
+    console.log("Documento escrito com ID: ", docRef.id);
   } catch (e) {
-    console.error("Erro ao adicionar o documento: ", e);
+    console.error("Erro ao adicionar documento: ", e);
+    throw new Error("Erro ao adicionar documento: " + e.message);
   }
 };
