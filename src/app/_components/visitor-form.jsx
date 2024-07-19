@@ -23,8 +23,8 @@ const VisitorForm = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <Card>
-        <CardHeader className="border-b-2 border-red-500 pb-4">
-          <CardTitle className="text-3xl font-semibold">
+        <CardHeader className="border-b-2 border-red-500 pb-4 w-[90%] mx-auto">
+          <CardTitle className="text-3xl font-semibold ">
             Liberação na Portaria
           </CardTitle>
           <CardDescription>
