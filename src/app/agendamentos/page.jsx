@@ -22,9 +22,38 @@ const Schedules = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
 
+  // Estados dos filtros
+  const [dateFilter, setDateFilter] = useState("");
+  const [visitorNameFilter, setVisitorNameFilter] = useState("");
+
+  const [filteredSchedules, setFilteredSchedules] = useState([]);
+
   useEffect(() => {
     fetchSchedules();
   }, [fetchSchedules]);
+
+  useEffect(() => {
+    // Aplicar os filtros
+    const filterSchedules = () => {
+      let result = [...schedules];
+
+      if (dateFilter) {
+        result = result.filter((schedule) => schedule.visitDate === dateFilter);
+      }
+
+      if (visitorNameFilter) {
+        result = result.filter((schedule) =>
+          schedule.visitorName
+            .toLowerCase()
+            .includes(visitorNameFilter.toLowerCase())
+        );
+      }
+
+      setFilteredSchedules(result);
+    };
+
+    filterSchedules();
+  }, [schedules, dateFilter, visitorNameFilter]);
 
   const formatDate = (dateStr) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
@@ -70,7 +99,7 @@ const Schedules = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {schedules.map((schedule) => (
+              {filteredSchedules.map((schedule) => (
                 <TableRow key={schedule.id}>
                   <TableCell className="text-center">
                     {formatDate(schedule.visitDate)}
@@ -109,7 +138,8 @@ const Schedules = () => {
           <CardFooter>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                Mostrando 1-{schedules.length} de {schedules.length} visitas
+                Mostrando 1-{filteredSchedules.length} de{" "}
+                {filteredSchedules.length} visitas
               </div>
               <Pagination />
             </div>
@@ -120,13 +150,19 @@ const Schedules = () => {
             type="date"
             placeholder="Filtrar por data"
             className="w-auto"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
           />
           <Input
             type="text"
             placeholder="Filtrar por nome do visitante"
             className="w-auto"
+            value={visitorNameFilter}
+            onChange={(e) => setVisitorNameFilter(e.target.value)}
           />
-          <Button variant="outline">Filtrar</Button>
+          <Button variant="outline" onClick={() => fetchSchedules()}>
+            Filtrar
+          </Button>
         </div>
       </div>
       <DeleteModal
