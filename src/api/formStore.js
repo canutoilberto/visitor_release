@@ -2,7 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
   submitFormToFirestore,
-  fetchSchedulesFromFirestore,
+  getSchedulesFromFirestore,
+  deleteScheduleFromFirestore,
 } from "./formUtils";
 
 export const useFormStore = create(
@@ -19,6 +20,14 @@ export const useFormStore = create(
       details: "",
       schedules: [],
       setFormData: (field, value) => set({ [field]: value }),
+      fetchSchedules: async () => {
+        try {
+          const schedules = await getSchedulesFromFirestore();
+          set({ schedules });
+        } catch (error) {
+          console.error("Erro ao buscar os agendamentos: ", error);
+        }
+      },
       submitForm: async () => {
         try {
           const formData = {
@@ -33,17 +42,19 @@ export const useFormStore = create(
             details: get().details,
           };
           await submitFormToFirestore(formData);
+          await get().fetchSchedules(); // Atualiza a lista de agendamentos após o envio do formulário
         } catch (error) {
           console.error("Erro ao enviar o formulário: ", error);
           throw new Error("Erro ao enviar o formulário: " + error.message);
         }
       },
-      fetchSchedules: async () => {
+      deleteSchedule: async (scheduleId) => {
         try {
-          const schedules = await fetchSchedulesFromFirestore();
-          set({ schedules });
+          await deleteScheduleFromFirestore(scheduleId);
+          await get().fetchSchedules(); // Atualiza a lista de agendamentos após a exclusão
         } catch (error) {
-          console.error("Erro ao buscar os agendamentos: ", error);
+          console.error("Erro ao excluir o agendamento: ", error);
+          throw new Error("Erro ao excluir o agendamento: " + error.message);
         }
       },
     }),
