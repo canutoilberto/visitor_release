@@ -26,8 +26,7 @@ const Schedules = () => {
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  // Estados dos filtros
-  const [dateFilter, setDateFilter] = useState("");
+  // Estado do filtro por nome do visitante
   const [visitorNameFilter, setVisitorNameFilter] = useState("");
 
   const [filteredSchedules, setFilteredSchedules] = useState([]);
@@ -41,10 +40,6 @@ const Schedules = () => {
     const filterSchedules = () => {
       let result = [...schedules];
 
-      if (dateFilter) {
-        result = result.filter((schedule) => schedule.visitDate === dateFilter);
-      }
-
       if (visitorNameFilter) {
         result = result.filter((schedule) =>
           schedule.visitorName
@@ -57,7 +52,7 @@ const Schedules = () => {
     };
 
     filterSchedules();
-  }, [schedules, dateFilter, visitorNameFilter]);
+  }, [schedules, visitorNameFilter]);
 
   const formatDate = (dateStr) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
@@ -162,13 +157,6 @@ const Schedules = () => {
           </CardFooter>
         </Card>
         <div className="mt-6 flex items-center gap-4">
-          <Input
-            type="date"
-            placeholder="Filtrar por data"
-            className="w-auto"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          />
           <Input
             type="text"
             placeholder="Filtrar por nome do visitante"

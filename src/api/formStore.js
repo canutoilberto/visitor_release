@@ -41,6 +41,19 @@ export const useFormStore = create(
             hostContact: get().hostContact,
             details: get().details,
           };
+
+          // Verificação de duplicidade
+          const existingSchedule = get().schedules.find(
+            (schedule) =>
+              schedule.visitDate === formData.visitDate &&
+              schedule.visitTime === formData.visitTime
+          );
+
+          if (existingSchedule) {
+            alert("Já existe um agendamento para esta data e hora.");
+            return;
+          }
+
           await submitFormToFirestore(formData);
           await get().fetchSchedules(); // Atualiza a lista de agendamentos após o envio do formulário
         } catch (error) {
