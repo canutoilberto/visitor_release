@@ -1,11 +1,9 @@
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,9 +11,6 @@ import { Label } from "@/components/ui/label";
 const DetailsModal = ({ isOpen, onClose, details }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Detalhes da Visita</Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Detalhes da Visita</DialogTitle>
@@ -48,11 +43,9 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
           </div>
         </div>
         <DialogFooter>
-          <div>
-            <Button type="button" onClick={onClose}>
-              Fechar
-            </Button>
-          </div>
+          <Button type="button" onClick={onClose}>
+            Fechar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

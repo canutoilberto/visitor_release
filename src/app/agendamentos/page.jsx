@@ -129,7 +129,6 @@ const Schedules = () => {
                     <div className="flex items-center justify-center gap-2">
                       <Button
                         className="bg-blue-600 text-white hover:bg-blue-500"
-                        variant="outline"
                         size="sm"
                         onClick={() => handleDetailsClick(schedule)}
                       >
