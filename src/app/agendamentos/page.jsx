@@ -23,12 +23,8 @@ const Schedules = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
   const [selectedScheduleDetails, setSelectedScheduleDetails] = useState(null);
-
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-
-  // Estado do filtro por nome do visitante
   const [visitorNameFilter, setVisitorNameFilter] = useState("");
-
   const [filteredSchedules, setFilteredSchedules] = useState([]);
 
   useEffect(() => {
@@ -36,10 +32,8 @@ const Schedules = () => {
   }, [fetchSchedules]);
 
   useEffect(() => {
-    // Aplicar os filtros
     const filterSchedules = () => {
       let result = [...schedules];
-
       if (visitorNameFilter) {
         result = result.filter((schedule) =>
           schedule.visitorName
@@ -47,10 +41,8 @@ const Schedules = () => {
             .includes(visitorNameFilter.toLowerCase())
         );
       }
-
       setFilteredSchedules(result);
     };
-
     filterSchedules();
   }, [schedules, visitorNameFilter]);
 
@@ -103,47 +95,55 @@ const Schedules = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredSchedules.map((schedule) => (
-                <TableRow key={schedule.id}>
-                  <TableCell className="text-center">
-                    {formatDate(schedule.visitDate)}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.visitTime}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.visitorName}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.visitorContact}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.details}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Button
-                        className="bg-blue-600 text-white hover:bg-blue-500"
-                        size="sm"
-                        onClick={() => handleDetailsClick(schedule)}
-                      >
-                        Detalhes
-                      </Button>
-                      <Button
-                        className="bg-red-600 text-white hover:bg-red-500"
-                        variant="danger"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedScheduleId(schedule.id);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        Excluir
-                      </Button>
-                    </div>
+              {filteredSchedules.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan="6" className="text-center">
+                    Nenhum agendamento encontrado
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                filteredSchedules.map((schedule) => (
+                  <TableRow key={schedule.id}>
+                    <TableCell className="text-center">
+                      {formatDate(schedule.visitDate)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {schedule.visitTime}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {schedule.visitorName}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {schedule.visitorContact}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {schedule.details}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Button
+                          className="bg-blue-600 text-white hover:bg-blue-500"
+                          size="sm"
+                          onClick={() => handleDetailsClick(schedule)}
+                        >
+                          Detalhes
+                        </Button>
+                        <Button
+                          className="bg-red-600 text-white hover:bg-red-500"
+                          variant="danger"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedScheduleId(schedule.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Excluir
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
           <CardFooter>
