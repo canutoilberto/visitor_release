@@ -20,12 +20,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { useFormStore } from "@/api/formStore";
 
 const VisitorForm = () => {
-  const { toast } = useToast();
-
   const {
     email,
     visitorName,
@@ -81,18 +78,18 @@ const VisitorForm = () => {
 
     try {
       await submitForm();
-      toast({
-        title: "Agendamento feito com sucesso",
-        description: "Aguardamos sua visita. Sejam bem-vindos!",
-        status: "success",
-      });
+      // Limpar o formulário após envio bem-sucedido
+      setFormData("email", "");
+      setFormData("visitorName", "");
+      setFormData("visitorContact", "");
+      setFormData("visitDate", "");
+      setFormData("visitTime", "");
+      setFormData("company", "");
+      setFormData("employeeName", "");
+      setFormData("hostContact", "");
+      setFormData("details", "");
     } catch (error) {
-      toast({
-        title: "Erro",
-        description:
-          "Ocorreu um erro ao agendar a visita. Por favor, tente novamente.",
-        status: "error",
-      });
+      console.error("Erro ao agendar a visita: ", error);
     } finally {
       setIsSubmitting(false); // Habilita o botão novamente
     }
