@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -23,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useFormStore } from "@/api/formStore";
 
 const VisitorForm = () => {
+  const router = useRouter();
   const {
     email,
     visitorName,
@@ -37,10 +39,9 @@ const VisitorForm = () => {
     submitForm,
   } = useFormStore();
 
-  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para desabilitar o botão
-  const [errors, setErrors] = useState({}); // Estado para mensagens de erro
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  // Configuração dos campos obrigatórios
   const requiredFields = {
     email: "E-mail",
     visitorName: "Nome completo do visitante",
@@ -52,7 +53,6 @@ const VisitorForm = () => {
     hostContact: "Ramal do responsável pela visita",
   };
 
-  // Função para validar campos obrigatórios
   const validateForm = () => {
     const newErrors = {};
 
@@ -74,11 +74,10 @@ const VisitorForm = () => {
       return;
     }
 
-    setIsSubmitting(true); // Desabilita o botão
+    setIsSubmitting(true);
 
     try {
       await submitForm();
-      // Limpar o formulário após envio bem-sucedido
       setFormData("email", "");
       setFormData("visitorName", "");
       setFormData("visitorContact", "");
@@ -91,8 +90,12 @@ const VisitorForm = () => {
     } catch (error) {
       console.error("Erro ao agendar a visita: ", error);
     } finally {
-      setIsSubmitting(false); // Habilita o botão novamente
+      setIsSubmitting(false);
     }
+  };
+
+  const handleNavigateToSchedules = () => {
+    router.push("/agendamentos");
   };
 
   return (
@@ -262,7 +265,14 @@ const VisitorForm = () => {
                 <div className="text-red-600">{errors.details}</div>
               )}
             </div>
-            <CardFooter>
+            <CardFooter className="flex justify-between">
+              <Button
+                type="button"
+                className="w-full bg-gray-600 hover:bg-gray-500 mt-6 mr-2"
+                onClick={handleNavigateToSchedules}
+              >
+                Ir para Agendamentos
+              </Button>
               <Button
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-500 mt-6"

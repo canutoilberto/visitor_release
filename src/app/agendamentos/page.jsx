@@ -1,5 +1,6 @@
 "use client";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 import {
@@ -13,9 +14,13 @@ import {
 import { Pagination } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { useFormStore } from "@/api/formStore";
+import DeleteModal from "@/components/modules/deleteModal/DeleteModal";
 
 const Schedules = () => {
-  const { schedules, fetchSchedules } = useFormStore();
+  const { schedules, fetchSchedules, deleteSchedule } = useFormStore();
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedScheduleId, setSelectedScheduleId] = useState(null);
 
   useEffect(() => {
     fetchSchedules();
@@ -26,12 +31,29 @@ const Schedules = () => {
     return new Date(dateStr).toLocaleDateString("pt-BR", options);
   };
 
+  const handleNewVisitClick = () => {
+    router.push("/");
+  };
+
+  const handleDelete = async (scheduleId) => {
+    try {
+      await deleteSchedule(scheduleId);
+      fetchSchedules(); // Atualize a lista de agendamentos após a exclusão
+    } catch (error) {
+      console.error("Erro ao excluir o agendamento: ", error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-start min-h-screen p-6 sm:p-10">
       <div className="max-w-[1200px] w-full">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Visitas Agendadas</h1>
-          <Button className="bg-blue-600 hover:bg-blue-500" size="sm">
+          <Button
+            size="sm"
+            className="bg-blue-600 text-white hover:bg-blue-500"
+            onClick={handleNewVisitClick}
+          >
             Nova Visita
           </Button>
         </div>
@@ -42,8 +64,9 @@ const Schedules = () => {
                 <TableHead className="text-center">Data</TableHead>
                 <TableHead className="text-center">Horário</TableHead>
                 <TableHead className="text-center">Visitante</TableHead>
+                <TableHead className="text-center">Contato</TableHead>
                 <TableHead className="text-center">Motivo</TableHead>
-                <TableHead className="text-center">Ações</TableHead>
+                <TableHead className="text-center ">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -59,21 +82,21 @@ const Schedules = () => {
                     {schedule.visitorName}
                   </TableCell>
                   <TableCell className="text-center">
+                    {schedule.visitorContact}
+                  </TableCell>
+                  <TableCell className="text-center">
                     {schedule.details}
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-2">
                       <Button
-                        className="bg-blue-600 text-white"
-                        variant="outline"
-                        size="sm"
-                      >
-                        Editar
-                      </Button>
-                      <Button
-                        className="bg-red-600 text-white"
+                        className="bg-red-600 text-white hover:bg-red-500"
                         variant="danger"
                         size="sm"
+                        onClick={() => {
+                          setSelectedScheduleId(schedule.id);
+                          setIsModalOpen(true);
+                        }}
                       >
                         Cancelar
                       </Button>
@@ -86,7 +109,7 @@ const Schedules = () => {
           <CardFooter>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                Mostrando 1-10 de {schedules.length} visitas
+                Mostrando 1-{schedules.length} de {schedules.length} visitas
               </div>
               <Pagination />
             </div>
@@ -106,6 +129,12 @@ const Schedules = () => {
           <Button variant="outline">Filtrar</Button>
         </div>
       </div>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleDelete}
+        scheduleId={selectedScheduleId}
+      />
     </div>
   );
 };
