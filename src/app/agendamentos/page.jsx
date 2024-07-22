@@ -24,7 +24,13 @@ const Schedules = () => {
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
   const [selectedScheduleDetails, setSelectedScheduleDetails] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  // Estados para filtros
   const [visitorNameFilter, setVisitorNameFilter] = useState("");
+  const [employeeNameFilter, setEmployeeNameFilter] = useState("");
+  const [startDateFilter, setStartDateFilter] = useState("");
+  const [endDateFilter, setEndDateFilter] = useState("");
+
   const [filteredSchedules, setFilteredSchedules] = useState([]);
 
   useEffect(() => {
@@ -32,8 +38,10 @@ const Schedules = () => {
   }, [fetchSchedules]);
 
   useEffect(() => {
+    // Aplicar os filtros
     const filterSchedules = () => {
       let result = [...schedules];
+
       if (visitorNameFilter) {
         result = result.filter((schedule) =>
           schedule.visitorName
@@ -41,15 +49,36 @@ const Schedules = () => {
             .includes(visitorNameFilter.toLowerCase())
         );
       }
+
+      if (employeeNameFilter) {
+        result = result.filter((schedule) =>
+          schedule.employeeName
+            .toLowerCase()
+            .includes(employeeNameFilter.toLowerCase())
+        );
+      }
+
+      if (startDateFilter && endDateFilter) {
+        result = result.filter((schedule) => {
+          const visitDate = new Date(schedule.visitDate);
+          return (
+            visitDate >= new Date(startDateFilter) &&
+            visitDate <= new Date(endDateFilter)
+          );
+        });
+      }
+
       setFilteredSchedules(result);
     };
-    filterSchedules();
-  }, [schedules, visitorNameFilter]);
 
-  const formatDate = (dateStr) => {
-    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(dateStr).toLocaleDateString("pt-BR", options);
-  };
+    filterSchedules();
+  }, [
+    schedules,
+    visitorNameFilter,
+    employeeNameFilter,
+    startDateFilter,
+    endDateFilter,
+  ]);
 
   const handleNewVisitClick = () => {
     router.push("/");
@@ -83,29 +112,23 @@ const Schedules = () => {
           </Button>
         </div>
         <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-center">Data</TableHead>
-                <TableHead className="text-center">Horário</TableHead>
-                <TableHead className="text-center">Visitante</TableHead>
-                <TableHead className="text-center">Contato</TableHead>
-                <TableHead className="text-center">Motivo</TableHead>
-                <TableHead className="text-center">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredSchedules.length === 0 ? (
+          {filteredSchedules.length > 0 ? (
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan="6" className="text-center">
-                    Nenhum agendamento encontrado
-                  </TableCell>
+                  <TableHead className="text-center">Data</TableHead>
+                  <TableHead className="text-center">Horário</TableHead>
+                  <TableHead className="text-center">Visitante</TableHead>
+                  <TableHead className="text-center">Contato</TableHead>
+                  <TableHead className="text-center">Responsável</TableHead>
+                  <TableHead className="text-center">Ações</TableHead>
                 </TableRow>
-              ) : (
-                filteredSchedules.map((schedule) => (
+              </TableHeader>
+              <TableBody>
+                {filteredSchedules.map((schedule) => (
                   <TableRow key={schedule.id}>
                     <TableCell className="text-center">
-                      {formatDate(schedule.visitDate)}
+                      {schedule.visitDate}
                     </TableCell>
                     <TableCell className="text-center">
                       {schedule.visitTime}
@@ -117,7 +140,7 @@ const Schedules = () => {
                       {schedule.visitorContact}
                     </TableCell>
                     <TableCell className="text-center">
-                      {schedule.details}
+                      {schedule.employeeName}
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-2">
@@ -142,10 +165,14 @@ const Schedules = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="p-4 text-center text-muted-foreground">
+              Nenhuma visita agendada...
+            </div>
+          )}
           <CardFooter>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
@@ -156,13 +183,34 @@ const Schedules = () => {
             </div>
           </CardFooter>
         </Card>
-        <div className="mt-6 flex items-center gap-4">
+        <div className="mt-6 flex flex-col sm:flex-row gap-4">
           <Input
             type="text"
-            placeholder="Filtrar por nome do visitante"
-            className="w-auto"
+            placeholder="Filtrar por visitante"
+            className="w-full sm:w-auto"
             value={visitorNameFilter}
             onChange={(e) => setVisitorNameFilter(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Filtrar por responsável"
+            className="w-full sm:w-auto"
+            value={employeeNameFilter}
+            onChange={(e) => setEmployeeNameFilter(e.target.value)}
+          />
+          <Input
+            type="date"
+            placeholder="Data inicial"
+            className="w-full sm:w-auto"
+            value={startDateFilter}
+            onChange={(e) => setStartDateFilter(e.target.value)}
+          />
+          <Input
+            type="date"
+            placeholder="Data final"
+            className="w-full sm:w-auto"
+            value={endDateFilter}
+            onChange={(e) => setEndDateFilter(e.target.value)}
           />
           <Button variant="outline" onClick={() => fetchSchedules()}>
             Filtrar

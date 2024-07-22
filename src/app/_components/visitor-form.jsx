@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormStore } from "@/api/formStore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VisitorForm = () => {
   const router = useRouter();
@@ -91,6 +93,7 @@ const VisitorForm = () => {
       console.error("Erro ao agendar a visita: ", error);
     } finally {
       setIsSubmitting(false);
+      toast("Agendamento realizado!");
     }
   };
 
@@ -207,11 +210,17 @@ const VisitorForm = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="tvcb">Tv Cabo Branco</SelectItem>
-                    <SelectItem value="tvpb">Tv Paraíba</SelectItem>
+                    <SelectItem value="TV Cabo Branco">
+                      Tv Cabo Branco
+                    </SelectItem>
+                    <SelectItem value="TV Paraíba">Tv Paraíba</SelectItem>
                     <SelectItem value="CBN">Rede Litorânea - CBN</SelectItem>
-                    <SelectItem value="cbfm">Cabo Branco FM</SelectItem>
-                    <SelectItem value="jornal-pb">Jornal da Paraíba</SelectItem>
+                    <SelectItem value="Cabo Branco FM">
+                      Cabo Branco FM
+                    </SelectItem>
+                    <SelectItem value="Jornal da Paraíba">
+                      Jornal da Paraíba
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -284,6 +293,7 @@ const VisitorForm = () => {
           </form>
         </CardContent>
       </Card>
+      <ToastContainer type="success" autoClose={2600} />
     </div>
   );
 };

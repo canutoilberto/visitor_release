@@ -18,7 +18,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
         <div className="grid gap-4 py-4">
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="name" className="text-right">
-              Nome
+              Nome:
             </Label>
             <div className="col-span-3">
               <p>{details?.visitorName || "N/A"}</p>
@@ -26,7 +26,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="contact" className="text-right">
-              Contato
+              Contato:
             </Label>
             <div className="col-span-3">
               <p>{details?.visitorContact || "N/A"}</p>
@@ -35,10 +35,18 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="company" className="text-right">
-              Empresa
+              Empresa:
             </Label>
             <div className="col-span-3">
               <p>{details?.company || "N/A"}</p>
+            </div>
+          </div>
+          <div className="grid items-center grid-cols-4 gap-4">
+            <Label htmlFor="company" className="text-right">
+              Motivo:
+            </Label>
+            <div className="col-span-3">
+              <p>{details?.details || "N/A"}</p>
             </div>
           </div>
         </div>

@@ -6,6 +6,12 @@ import {
   deleteScheduleFromFirestore,
 } from "./formUtils";
 
+// Função para validar o e-mail
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 export const useFormStore = create(
   persist(
     (set, get) => ({
@@ -41,6 +47,12 @@ export const useFormStore = create(
             hostContact: get().hostContact,
             details: get().details,
           };
+
+          // Validação do e-mail
+          if (!isValidEmail(formData.email)) {
+            alert("O e-mail do visitante não é válido.");
+            return;
+          }
 
           // Verificação de duplicidade
           const existingSchedule = get().schedules.find(
