@@ -15,12 +15,16 @@ import { Pagination } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { useFormStore } from "@/api/formStore";
 import DeleteModal from "@/components/modules/deleteModal/DeleteModal";
+import DetailsModal from "@/components/modules/detailsModal/DetailsModal";
 
 const Schedules = () => {
   const { schedules, fetchSchedules, deleteSchedule } = useFormStore();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
+  const [selectedScheduleDetails, setSelectedScheduleDetails] = useState(null);
+
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   // Estados dos filtros
   const [dateFilter, setDateFilter] = useState("");
@@ -73,6 +77,11 @@ const Schedules = () => {
     }
   };
 
+  const handleDetailsClick = (schedule) => {
+    setSelectedScheduleDetails(schedule);
+    setIsDetailsModalOpen(true);
+  };
+
   return (
     <div className="flex justify-center items-start min-h-screen p-6 sm:p-10">
       <div className="max-w-[1200px] w-full">
@@ -95,7 +104,7 @@ const Schedules = () => {
                 <TableHead className="text-center">Visitante</TableHead>
                 <TableHead className="text-center">Contato</TableHead>
                 <TableHead className="text-center">Motivo</TableHead>
-                <TableHead className="text-center ">Ações</TableHead>
+                <TableHead className="text-center">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -119,6 +128,14 @@ const Schedules = () => {
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-2">
                       <Button
+                        className="bg-blue-600 text-white hover:bg-blue-500"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDetailsClick(schedule)}
+                      >
+                        Detalhes
+                      </Button>
+                      <Button
                         className="bg-red-600 text-white hover:bg-red-500"
                         variant="danger"
                         size="sm"
@@ -127,7 +144,7 @@ const Schedules = () => {
                           setIsModalOpen(true);
                         }}
                       >
-                        Cancelar
+                        Excluir
                       </Button>
                     </div>
                   </TableCell>
@@ -170,6 +187,11 @@ const Schedules = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDelete}
         scheduleId={selectedScheduleId}
+      />
+      <DetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        details={selectedScheduleDetails}
       />
     </div>
   );
