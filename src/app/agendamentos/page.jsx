@@ -212,7 +212,10 @@ const Schedules = () => {
             value={endDateFilter}
             onChange={(e) => setEndDateFilter(e.target.value)}
           />
-          <Button variant="outline" onClick={() => fetchSchedules()}>
+          <Button
+            className="bg-cyan-600 text-white hover:bg-cyan-500"
+            onClick={() => fetchSchedules()}
+          >
             Filtrar
           </Button>
         </div>
