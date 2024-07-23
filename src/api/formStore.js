@@ -25,6 +25,7 @@ export const useFormStore = create(
       hostContact: "",
       details: "",
       schedules: [],
+      theme: "light", // Estado do tema
       setFormData: (field, value) => set({ [field]: value }),
       fetchSchedules: async () => {
         try {
@@ -81,6 +82,14 @@ export const useFormStore = create(
           console.error("Erro ao excluir o agendamento: ", error);
           throw new Error("Erro ao excluir o agendamento: " + error.message);
         }
+      },
+      toggleTheme: () => {
+        set((state) => {
+          const newTheme = state.theme === "light" ? "dark" : "light";
+          document.documentElement.classList.remove(state.theme);
+          document.documentElement.classList.add(newTheme);
+          return { theme: newTheme };
+        });
       },
     }),
     {
