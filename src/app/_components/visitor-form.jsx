@@ -274,17 +274,17 @@ const VisitorForm = () => {
                 <div className="text-red-600">{errors.details}</div>
               )}
             </div>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex flex-col sm:flex-row sm:justify-between space-y-2 sm:space-y-0 sm:space-x-2 mt-6">
               <Button
                 type="button"
-                className="w-full bg-gray-600 hover:bg-gray-500 mt-6 mr-2"
+                className="w-full bg-gray-600 hover:bg-gray-500"
                 onClick={handleNavigateToSchedules}
               >
                 Ir para Agendamentos
               </Button>
               <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 mt-6"
+                className="w-full bg-blue-600 hover:bg-blue-500"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Enviando..." : "Enviar"}

@@ -112,67 +112,124 @@ const Schedules = () => {
           </Button>
         </div>
         <Card>
-          {filteredSchedules.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-center">Data</TableHead>
-                  <TableHead className="text-center">Horário</TableHead>
-                  <TableHead className="text-center">Visitante</TableHead>
-                  <TableHead className="text-center">Contato</TableHead>
-                  <TableHead className="text-center">Responsável</TableHead>
-                  <TableHead className="text-center">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredSchedules.map((schedule) => (
-                  <TableRow key={schedule.id}>
-                    <TableCell className="text-center">
-                      {schedule.visitDate}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {schedule.visitTime}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {schedule.visitorName}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {schedule.visitorContact}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {schedule.employeeName}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <Button
-                          className="bg-blue-600 text-white hover:bg-blue-500"
-                          size="sm"
-                          onClick={() => handleDetailsClick(schedule)}
-                        >
-                          Detalhes
-                        </Button>
-                        <Button
-                          className="bg-red-600 text-white hover:bg-red-500"
-                          variant="danger"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedScheduleId(schedule.id);
-                            setIsModalOpen(true);
-                          }}
-                        >
-                          Excluir
-                        </Button>
-                      </div>
-                    </TableCell>
+          <div className="hidden sm:block">
+            {filteredSchedules.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Data</TableHead>
+                    <TableHead className="text-center">Horário</TableHead>
+                    <TableHead className="text-center">Visitante</TableHead>
+                    <TableHead className="text-center">Contato</TableHead>
+                    <TableHead className="text-center">Responsável</TableHead>
+                    <TableHead className="text-center">Ações</TableHead>
                   </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredSchedules.map((schedule) => (
+                    <TableRow key={schedule.id}>
+                      <TableCell className="text-center">
+                        {schedule.visitDate}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {schedule.visitTime}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {schedule.visitorName}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {schedule.visitorContact}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {schedule.employeeName}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <Button
+                            className="bg-blue-600 text-white hover:bg-blue-500"
+                            size="sm"
+                            onClick={() => handleDetailsClick(schedule)}
+                          >
+                            Detalhes
+                          </Button>
+                          <Button
+                            className="bg-red-600 text-white hover:bg-red-500"
+                            variant="danger"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedScheduleId(schedule.id);
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            Excluir
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="p-4 text-center text-muted-foreground">
+                Nenhuma visita agendada...
+              </div>
+            )}
+          </div>
+          <div className="block sm:hidden">
+            {filteredSchedules.length > 0 ? (
+              <div className="space-y-4">
+                {filteredSchedules.map((schedule) => (
+                  <Card key={schedule.id} className="p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold">Data:</p>
+                        <p>{schedule.visitDate}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Horário:</p>
+                        <p>{schedule.visitTime}</p>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <p className="font-semibold">Visitante:</p>
+                      <p>{schedule.visitorName}</p>
+                    </div>
+                    <div className="mt-2">
+                      <p className="font-semibold">Contato:</p>
+                      <p>{schedule.visitorContact}</p>
+                    </div>
+                    <div className="mt-2">
+                      <p className="font-semibold">Responsável:</p>
+                      <p>{schedule.employeeName}</p>
+                    </div>
+                    <div className="mt-4 flex justify-end gap-2">
+                      <Button
+                        className="bg-blue-600 text-white hover:bg-blue-500"
+                        size="sm"
+                        onClick={() => handleDetailsClick(schedule)}
+                      >
+                        Detalhes
+                      </Button>
+                      <Button
+                        className="bg-red-600 text-white hover:bg-red-500"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedScheduleId(schedule.id);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        Excluir
+                      </Button>
+                    </div>
+                  </Card>
                 ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="p-4 text-center text-muted-foreground">
-              Nenhuma visita agendada...
-            </div>
-          )}
+              </div>
+            ) : (
+              <div className="p-4 text-center text-muted-foreground">
+                Nenhuma visita agendada...
+              </div>
+            )}
+          </div>
           <CardFooter>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
