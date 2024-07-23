@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -11,11 +12,14 @@ import { Label } from "@/components/ui/label";
 const DetailsModal = ({ isOpen, onClose, details }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        aria-describedby="details-dialog-description"
+      >
         <DialogHeader>
           <DialogTitle>Detalhes da Visita</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div id="details-dialog-description" className="grid gap-4 py-4">
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="name" className="text-right">
               Nome:
@@ -42,7 +46,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             </div>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="company" className="text-right">
+            <Label htmlFor="reason" className="text-right">
               Motivo:
             </Label>
             <div className="col-span-3">

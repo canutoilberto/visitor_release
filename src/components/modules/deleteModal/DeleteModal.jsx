@@ -1,7 +1,6 @@
 "use client";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -13,10 +12,13 @@ import { Button } from "@/components/ui/button";
 const DeleteModal = ({ isOpen, onClose, onConfirm, scheduleId }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        aria-describedby="delete-dialog-description"
+      >
         <DialogHeader>
           <DialogTitle>Excluir Registro</DialogTitle>
-          <DialogDescription>
+          <DialogDescription id="delete-dialog-description">
             Tem certeza que deseja excluir este registro? Essa ação não poderá
             ser desfeita.
           </DialogDescription>
