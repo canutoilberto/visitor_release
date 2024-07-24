@@ -4,30 +4,29 @@ Este projeto é uma aplicação web para o gerenciamento de agendamentos de visi
 
 ## Índice
 
-- Funcionalidades
-- Tecnologias
-- Arquitetura
-- Instalação
-- Uso
-- Contribuição
-- Licença
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias](#tecnologias)
+- [Arquitetura](#arquitetura)
+- [Instalação](#instalação)
+- [Uso](#uso)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
 
 ## Funcionalidades
 
-- Cadastro de Visitas: Permite o registro de novas visitas com informações detalhadas como data, horário, visitante, contato e responsável.
-- Visualização de Agendamentos: Exibe todos os agendamentos cadastrados em uma tabela e em uma visualização de cartões para dispositivos móveis.
-- Exclusão de Visitas: Possibilita a exclusão de agendamentos com confirmação através de um modal de confirmação.
-- Filtros de Busca: Oferece filtros para buscar visitas por nome do visitante, responsável, e intervalo de datas.
-- Troca de Tema: Suporta alternância entre temas claro e escuro.
+- `Cadastro de Visitas`: Permite o registro de novas visitas com informações detalhadas como data, horário, visitante, contato e responsável.
+- `Visualização de Agendamentos`: Exibe todos os agendamentos cadastrados em uma tabela e em uma visualização de cartões para dispositivos móveis.
+- `Exclusão de Visitas`: Possibilita a exclusão de agendamentos com confirmação através de um modal de confirmação.
+- `Filtros de Busca`: Oferece filtros para buscar visitas por nome do visitante, responsável, e intervalo de datas.
+- `Troca de Tema`: Suporta alternância entre temas claro e escuro.
 
 ## Tecnologias
 
-### - Frontend:
-
-- ReactJS
-- ShadcnUI
-- Zustand
-- Firebase
+- **Frontend:**
+  - [ReactJS](https://reactjs.org/)
+  - [ShadcnUI](https://ui.shadcn.com/)
+  - [Zustand](https://github.com/pmndrs/zustand)
+  - [Firebase](https://firebase.google.com/)
 
 ### - Backend:
 
