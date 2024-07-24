@@ -23,7 +23,7 @@ Este projeto é uma aplicação web para o gerenciamento de agendamentos de visi
 ## Tecnologias
 
 - **Frontend:**
-  - [ReactJS](https://reactjs.org/)
+  - [NextJS](https://nextjs.org/)
   - [ShadcnUI](https://ui.shadcn.com/)
   - [Zustand](https://github.com/pmndrs/zustand)
   - [Firebase](https://firebase.google.com/)
