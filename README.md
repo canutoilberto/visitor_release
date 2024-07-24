@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Aplicação de Agendamento de Visitas
 
-## Getting Started
+Este projeto é uma aplicação web para o gerenciamento de agendamentos de visitas em uma empresa. Construída com ReactJS, ShadcnUI, Zustand e Firebase, a aplicação permite cadastrar, visualizar e excluir agendamentos, além de realizar filtros para facilitar a busca por visitas específicas.
 
-First, run the development server:
+## Índice
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Funcionalidades
+- Tecnologias
+- Arquitetura
+- Instalação
+- Uso
+- Contribuição
+- Licença
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Funcionalidades
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- Cadastro de Visitas: Permite o registro de novas visitas com informações detalhadas como data, horário, visitante, contato e responsável.
+- Visualização de Agendamentos: Exibe todos os agendamentos cadastrados em uma tabela e em uma visualização de cartões para dispositivos móveis.
+- Exclusão de Visitas: Possibilita a exclusão de agendamentos com confirmação através de um modal de confirmação.
+- Filtros de Busca: Oferece filtros para buscar visitas por nome do visitante, responsável, e intervalo de datas.
+- Troca de Tema: Suporta alternância entre temas claro e escuro.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tecnologias
 
-## Learn More
+### - Frontend:
 
-To learn more about Next.js, take a look at the following resources:
+- ReactJS
+- ShadcnUI
+- Zustand
+- Firebase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### - Backend:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Firebase Firestore para armazenamento e manipulação dos dados.
 
-## Deploy on Vercel
+## Arquitetura
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Componentes Principais
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Schedules.jsx: Componente responsável pela visualização e gerenciamento dos agendamentos. Permite visualizar, filtrar, detalhar e excluir visitas.
+- DeleteModal.jsx: Modal para confirmação de exclusão de um agendamento.
+- DetailsModal.jsx: Modal para exibição dos detalhes de um agendamento.
+
+### Gerenciador de Estado (Zustand)
+
+Utiliza Zustand para gerenciamento do estado da aplicação, incluindo dados dos formulários e temas.
+
+#### Principais Funções:
+
+- `fetchSchedules`: Busca os agendamentos do Firestore.
+- `submitForm`: Envia dados do formulário para o Firestore e valida o e-mail e a duplicidade de agendamentos.
+- `deleteSchedule`: Remove um agendamento do Firestore.
+- `toggleTheme`: Alterna entre os temas claro e escuro.
+
+## Funções de Banco de Dados
+
+- `submitFormToFirestore`: Adiciona um novo agendamento à coleção "schedules" no Firestore.
+- `getSchedulesFromFirestore`: Recupera todos os agendamentos da coleção "schedules" no Firestore.
+- `deleteScheduleFromFirestore`: Remove um agendamento específico da coleção "schedules" no Firestore.
+
+# Instalação
+
+1. Clone o Repositório:
+   git clone https://github.com/usuario/repo.git
+
+2. Navegue até o Diretório do Projeto:
+   cd repo
+
+3. Instale as Dependências:
+   npm install
+
+4. Configuração do Firebase:
+
+- Crie um arquivo firebaseConfig.js no diretório api com as credenciais do Firebase:
+  import { initializeApp } from "firebase/app";
+  import { getFirestore } from "firebase/firestore";
+
+  const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+  };
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp);
+
+  export { firebaseApp, db };
+
+## Uso
+
+1. Inicie o Servidor de Desenvolvimento:
+   npm run dev
+
+2. Acesse a Aplicação:
+   Abra o navegador e vá para `http://localhost:3000`.
+
+3. Funcionalidades:
+
+- Cadastrar Visitas: Acesse a página inicial e use o botão "Nova Visita" para adicionar um novo agendamento.
+- Visualizar e Filtrar: Utilize os filtros para buscar visitas e visualize os agendamentos em formato de tabela ou cartões.
+- Excluir e Detalhar: Clique nos botões de "Detalhes" e "Excluir" para gerenciar os agendamentos.
