@@ -37,9 +37,9 @@ Este projeto é uma aplicação web para o gerenciamento de agendamentos de visi
 
 ### Componentes Principais
 
-- Schedules.jsx: Componente responsável pela visualização e gerenciamento dos agendamentos. Permite visualizar, filtrar, detalhar e excluir visitas.
-- DeleteModal.jsx: Modal para confirmação de exclusão de um agendamento.
-- DetailsModal.jsx: Modal para exibição dos detalhes de um agendamento.
+- `Schedules.jsx`: Componente responsável pela visualização e gerenciamento dos agendamentos. Permite visualizar, filtrar, detalhar e excluir visitas.
+- `DeleteModal.jsx`: Modal para confirmação de exclusão de um agendamento.
+- `DetailsModal.jsx`: Modal para exibição dos detalhes de um agendamento.
 
 ### Gerenciador de Estado (Zustand)
 
@@ -61,13 +61,22 @@ Utiliza Zustand para gerenciamento do estado da aplicação, incluindo dados dos
 # Instalação
 
 1. Clone o Repositório:
-   git clone https://github.com/usuario/repo.git
+
+```
+ git clone https://github.com/usuario/repo.git
+```
 
 2. Navegue até o Diretório do Projeto:
-   cd repo
+
+```
+ cd repo
+```
 
 3. Instale as Dependências:
-   npm install
+
+```
+ npm install
+```
 
 4. Configuração do Firebase:
 
@@ -95,7 +104,10 @@ export { firebaseApp, db };
 ## Uso
 
 1. Inicie o Servidor de Desenvolvimento:
-   npm run dev
+
+```
+ npm run dev
+```
 
 2. Acesse a Aplicação:
    Abra o navegador e vá para `http://localhost:3000`.
@@ -105,3 +117,33 @@ export { firebaseApp, db };
 - Cadastrar Visitas: Acesse a página inicial e use o botão "Nova Visita" para adicionar um novo agendamento.
 - Visualizar e Filtrar: Utilize os filtros para buscar visitas e visualize os agendamentos em formato de tabela ou cartões.
 - Excluir e Detalhar: Clique nos botões de "Detalhes" e "Excluir" para gerenciar os agendamentos.
+
+# Contribuição
+
+### Sinta-se à vontade para contribuir com melhorias! Para isso:
+
+1. Fork o Repositório.
+
+2. Crie uma Branch para sua Feature:
+
+```
+git checkout -b minha-feature
+```
+
+3. Faça as Alterações e Commit:
+
+```
+git commit -am 'Adiciona nova feature'
+```
+
+4. Push para o Repositório:
+
+```
+git push origin minha-feature
+```
+
+5. Abra um Pull Request.
+
+# Licença
+
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
