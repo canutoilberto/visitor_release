@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useFormStore } from "@/api/formStore";
 import DeleteModal from "@/components/modules/deleteModal/DeleteModal";
 import DetailsModal from "@/components/modules/detailsModal/DetailsModal";
+import PrivateRoute from "@/components/modules/privateRoute/PrivateRoute";
 
 const Schedules = () => {
   const { schedules, fetchSchedules, deleteSchedule } = useFormStore();
@@ -99,196 +100,198 @@ const Schedules = () => {
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen p-6 sm:p-10">
-      <div className="max-w-[1200px] w-full">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Visitas Agendadas</h1>
-          <Button
-            size="sm"
-            className="bg-blue-600 text-white hover:bg-blue-500"
-            onClick={handleNewVisitClick}
-          >
-            Nova Visita
-          </Button>
-        </div>
-        <Card>
-          <div className="hidden sm:block">
-            {filteredSchedules.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-center">Data</TableHead>
-                    <TableHead className="text-center">Horário</TableHead>
-                    <TableHead className="text-center">Visitante</TableHead>
-                    <TableHead className="text-center">Contato</TableHead>
-                    <TableHead className="text-center">Responsável</TableHead>
-                    <TableHead className="text-center">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredSchedules.map((schedule) => (
-                    <TableRow key={schedule.id}>
-                      <TableCell className="text-center">
-                        {schedule.visitDate}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {schedule.visitTime}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {schedule.visitorName}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {schedule.visitorContact}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {schedule.employeeName}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <Button
-                            className="bg-blue-600 text-white hover:bg-blue-500"
-                            size="sm"
-                            onClick={() => handleDetailsClick(schedule)}
-                          >
-                            Detalhes
-                          </Button>
-                          <Button
-                            className="bg-red-600 text-white hover:bg-red-500"
-                            variant="danger"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedScheduleId(schedule.id);
-                              setIsModalOpen(true);
-                            }}
-                          >
-                            Excluir
-                          </Button>
-                        </div>
-                      </TableCell>
+    <PrivateRoute>
+      <div className="flex justify-center items-start min-h-screen p-6 sm:p-10">
+        <div className="max-w-[1200px] w-full">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Visitas Agendadas</h1>
+            <Button
+              size="sm"
+              className="bg-blue-600 text-white hover:bg-blue-500"
+              onClick={handleNewVisitClick}
+            >
+              Nova Visita
+            </Button>
+          </div>
+          <Card>
+            <div className="hidden sm:block">
+              {filteredSchedules.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-center">Data</TableHead>
+                      <TableHead className="text-center">Horário</TableHead>
+                      <TableHead className="text-center">Visitante</TableHead>
+                      <TableHead className="text-center">Contato</TableHead>
+                      <TableHead className="text-center">Responsável</TableHead>
+                      <TableHead className="text-center">Ações</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <div className="p-4 text-center text-muted-foreground">
-                Nenhuma visita agendada...
-              </div>
-            )}
-          </div>
-          <div className="block sm:hidden">
-            {filteredSchedules.length > 0 ? (
-              <div className="space-y-4">
-                {filteredSchedules.map((schedule) => (
-                  <Card key={schedule.id} className="p-4">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="font-semibold">Data:</p>
-                        <p>{schedule.visitDate}</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Horário:</p>
-                        <p>{schedule.visitTime}</p>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <p className="font-semibold">Visitante:</p>
-                      <p>{schedule.visitorName}</p>
-                    </div>
-                    <div className="mt-2">
-                      <p className="font-semibold">Contato:</p>
-                      <p>{schedule.visitorContact}</p>
-                    </div>
-                    <div className="mt-2">
-                      <p className="font-semibold">Responsável:</p>
-                      <p>{schedule.employeeName}</p>
-                    </div>
-                    <div className="mt-4 flex justify-end gap-2">
-                      <Button
-                        className="bg-blue-600 text-white hover:bg-blue-500"
-                        size="sm"
-                        onClick={() => handleDetailsClick(schedule)}
-                      >
-                        Detalhes
-                      </Button>
-                      <Button
-                        className="bg-red-600 text-white hover:bg-red-500"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedScheduleId(schedule.id);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        Excluir
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="p-4 text-center text-muted-foreground">
-                Nenhuma visita agendada...
-              </div>
-            )}
-          </div>
-          <CardFooter>
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                Mostrando 1-{filteredSchedules.length} de{" "}
-                {filteredSchedules.length} visitas
-              </div>
-              <Pagination />
+                  </TableHeader>
+                  <TableBody>
+                    {filteredSchedules.map((schedule) => (
+                      <TableRow key={schedule.id}>
+                        <TableCell className="text-center">
+                          {schedule.visitDate}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {schedule.visitTime}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {schedule.visitorName}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {schedule.visitorContact}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {schedule.employeeName}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <Button
+                              className="bg-blue-600 text-white hover:bg-blue-500"
+                              size="sm"
+                              onClick={() => handleDetailsClick(schedule)}
+                            >
+                              Detalhes
+                            </Button>
+                            <Button
+                              className="bg-red-600 text-white hover:bg-red-500"
+                              variant="danger"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedScheduleId(schedule.id);
+                                setIsModalOpen(true);
+                              }}
+                            >
+                              Excluir
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="p-4 text-center text-muted-foreground">
+                  Nenhuma visita agendada...
+                </div>
+              )}
             </div>
-          </CardFooter>
-        </Card>
-        <div className="mt-6 flex flex-col sm:flex-row gap-4">
-          <Input
-            type="text"
-            placeholder="Filtrar por visitante"
-            className="w-full sm:w-auto"
-            value={visitorNameFilter}
-            onChange={(e) => setVisitorNameFilter(e.target.value)}
-          />
-          <Input
-            type="text"
-            placeholder="Filtrar por responsável"
-            className="w-full sm:w-auto"
-            value={employeeNameFilter}
-            onChange={(e) => setEmployeeNameFilter(e.target.value)}
-          />
-          <Input
-            type="date"
-            placeholder="Data inicial"
-            className="w-full sm:w-auto"
-            value={startDateFilter}
-            onChange={(e) => setStartDateFilter(e.target.value)}
-          />
-          <Input
-            type="date"
-            placeholder="Data final"
-            className="w-full sm:w-auto"
-            value={endDateFilter}
-            onChange={(e) => setEndDateFilter(e.target.value)}
-          />
-          <Button
-            className="bg-cyan-600 text-white hover:bg-cyan-500"
-            onClick={() => fetchSchedules()}
-          >
-            Filtrar
-          </Button>
+            <div className="block sm:hidden">
+              {filteredSchedules.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredSchedules.map((schedule) => (
+                    <Card key={schedule.id} className="p-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-semibold">Data:</p>
+                          <p>{schedule.visitDate}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold">Horário:</p>
+                          <p>{schedule.visitTime}</p>
+                        </div>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-semibold">Visitante:</p>
+                        <p>{schedule.visitorName}</p>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-semibold">Contato:</p>
+                        <p>{schedule.visitorContact}</p>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-semibold">Responsável:</p>
+                        <p>{schedule.employeeName}</p>
+                      </div>
+                      <div className="mt-4 flex justify-end gap-2">
+                        <Button
+                          className="bg-blue-600 text-white hover:bg-blue-500"
+                          size="sm"
+                          onClick={() => handleDetailsClick(schedule)}
+                        >
+                          Detalhes
+                        </Button>
+                        <Button
+                          className="bg-red-600 text-white hover:bg-red-500"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedScheduleId(schedule.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Excluir
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-muted-foreground">
+                  Nenhuma visita agendada...
+                </div>
+              )}
+            </div>
+            <CardFooter>
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-muted-foreground">
+                  Mostrando 1-{filteredSchedules.length} de{" "}
+                  {filteredSchedules.length} visitas
+                </div>
+                <Pagination />
+              </div>
+            </CardFooter>
+          </Card>
+          <div className="mt-6 flex flex-col sm:flex-row gap-4">
+            <Input
+              type="text"
+              placeholder="Filtrar por visitante"
+              className="w-full sm:w-auto"
+              value={visitorNameFilter}
+              onChange={(e) => setVisitorNameFilter(e.target.value)}
+            />
+            <Input
+              type="text"
+              placeholder="Filtrar por responsável"
+              className="w-full sm:w-auto"
+              value={employeeNameFilter}
+              onChange={(e) => setEmployeeNameFilter(e.target.value)}
+            />
+            <Input
+              type="date"
+              placeholder="Data inicial"
+              className="w-full sm:w-auto"
+              value={startDateFilter}
+              onChange={(e) => setStartDateFilter(e.target.value)}
+            />
+            <Input
+              type="date"
+              placeholder="Data final"
+              className="w-full sm:w-auto"
+              value={endDateFilter}
+              onChange={(e) => setEndDateFilter(e.target.value)}
+            />
+            <Button
+              className="bg-cyan-600 text-white hover:bg-cyan-500"
+              onClick={() => fetchSchedules()}
+            >
+              Filtrar
+            </Button>
+          </div>
         </div>
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleDelete}
+          scheduleId={selectedScheduleId}
+        />
+        <DetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          details={selectedScheduleDetails}
+        />
       </div>
-      <DeleteModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleDelete}
-        scheduleId={selectedScheduleId}
-      />
-      <DetailsModal
-        isOpen={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
-        details={selectedScheduleDetails}
-      />
-    </div>
+    </PrivateRoute>
   );
 };
 

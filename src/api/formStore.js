@@ -4,13 +4,12 @@ import {
   submitFormToFirestore,
   getSchedulesFromFirestore,
   deleteScheduleFromFirestore,
+  checkUserExists,
+  addUserToFirestore,
+  loginWithEmailAndPassword, // Adicionar a importação aqui se necessário
+  logoutUser, // Se você precisar dessa função também
 } from "./formUtils";
-
-// Função para validar o e-mail
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export const useFormStore = create(
   persist(
@@ -25,7 +24,7 @@ export const useFormStore = create(
       hostContact: "",
       details: "",
       schedules: [],
-      theme: "light", // Estado do tema
+      user: null, // Estado do usuário
       setFormData: (field, value) => set({ [field]: value }),
       fetchSchedules: async () => {
         try {
@@ -49,13 +48,11 @@ export const useFormStore = create(
             details: get().details,
           };
 
-          // Validação do e-mail
           if (!isValidEmail(formData.email)) {
             alert("O e-mail do visitante não é válido.");
             return;
           }
 
-          // Verificação de duplicidade
           const existingSchedule = get().schedules.find(
             (schedule) =>
               schedule.visitDate === formData.visitDate &&
@@ -68,7 +65,7 @@ export const useFormStore = create(
           }
 
           await submitFormToFirestore(formData);
-          await get().fetchSchedules(); // Atualiza a lista de agendamentos após o envio do formulário
+          await get().fetchSchedules();
         } catch (error) {
           console.error("Erro ao enviar o formulário: ", error);
           throw new Error("Erro ao enviar o formulário: " + error.message);
@@ -77,18 +74,22 @@ export const useFormStore = create(
       deleteSchedule: async (scheduleId) => {
         try {
           await deleteScheduleFromFirestore(scheduleId);
-          await get().fetchSchedules(); // Atualiza a lista de agendamentos após a exclusão
+          await get().fetchSchedules();
         } catch (error) {
           console.error("Erro ao excluir o agendamento: ", error);
           throw new Error("Erro ao excluir o agendamento: " + error.message);
         }
       },
-      toggleTheme: () => {
-        set((state) => {
-          const newTheme = state.theme === "light" ? "dark" : "light";
-          document.documentElement.classList.remove(state.theme);
-          document.documentElement.classList.add(newTheme);
-          return { theme: newTheme };
+      setUser: (user) => set({ user }), // Função para atualizar o estado do usuário
+      listenAuthState: () => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            await addUserToFirestore(user.email, user.uid);
+            set({ user: { email: user.email, uid: user.uid } });
+          } else {
+            set({ user: null });
+          }
         });
       },
     }),

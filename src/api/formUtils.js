@@ -5,11 +5,42 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
-import { firebaseApp } from "@/api/firebaseConfig"; // Certifique-se de que está importando corretamente a inicialização do Firebase
+import { firebaseApp } from "@/api/firebaseConfig";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 const db = getFirestore(firebaseApp);
+const auth = getAuth();
 
+// Função para adicionar ou atualizar um usuário na coleção "users"
+export const addUserToFirestore = async (email, registration) => {
+  try {
+    const userDocRef = doc(db, "users", email);
+    await setDoc(userDocRef, { registration });
+    console.log("Usuário adicionado/atualizado com sucesso.");
+  } catch (error) {
+    console.error("Erro ao adicionar usuário: ", error);
+    throw new Error("Erro ao adicionar usuário: " + error.message);
+  }
+};
+
+// Função para verificar se um usuário existe na coleção "users"
+export const checkUserExists = async (email) => {
+  try {
+    const userDocRef = doc(db, "users", email);
+    const userDoc = await getDoc(userDocRef);
+    return userDoc.exists(); // Verifica se o documento do usuário existe
+  } catch (error) {
+    console.error("Erro ao verificar a existência do usuário: ", error);
+    throw new Error(
+      "Erro ao verificar a existência do usuário: " + error.message
+    );
+  }
+};
+
+// Função para adicionar um formulário à coleção "schedules"
 export const submitFormToFirestore = async (formData) => {
   try {
     const docRef = await addDoc(collection(db, "schedules"), formData);
@@ -20,6 +51,7 @@ export const submitFormToFirestore = async (formData) => {
   }
 };
 
+// Função para obter os agendamentos da coleção "schedules"
 export const getSchedulesFromFirestore = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "schedules"));
@@ -34,7 +66,7 @@ export const getSchedulesFromFirestore = async () => {
   }
 };
 
-// Adicione esta função para excluir um documento
+// Função para excluir um agendamento da coleção "schedules"
 export const deleteScheduleFromFirestore = async (scheduleId) => {
   try {
     const docRef = doc(db, "schedules", scheduleId);
@@ -43,5 +75,31 @@ export const deleteScheduleFromFirestore = async (scheduleId) => {
   } catch (error) {
     console.error("Erro ao excluir documento: ", error);
     throw new Error("Erro ao excluir documento: " + error.message);
+  }
+};
+
+// Função para login do usuário
+export const loginWithEmailAndPassword = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential.user; // Retorna o usuário autenticado
+  } catch (error) {
+    console.error("Erro ao fazer login: ", error);
+    throw new Error("Erro ao fazer login: " + error.message);
+  }
+};
+
+// Função para logout do usuário
+export const logout = async () => {
+  try {
+    await signOut(auth);
+    console.log("Usuário deslogado com sucesso.");
+  } catch (error) {
+    console.error("Erro ao fazer logout: ", error);
+    throw new Error("Erro ao fazer logout: " + error.message);
   }
 };
