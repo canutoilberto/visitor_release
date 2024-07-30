@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Card,
   CardHeader,
@@ -111,6 +112,15 @@ export default function Home() {
                   {loading ? "Aguarde..." : "Entrar"}
                 </Button>
                 {error && <p className="text-red-600 mt-2">{error}</p>}
+                <p className="text-center mt-4">
+                  Não possui uma conta?{" "}
+                  <Link
+                    href="/cadastrar-conta"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Cadastrar
+                  </Link>
+                </p>
               </CardFooter>
             </form>
           </CardContent>
