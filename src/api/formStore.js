@@ -4,7 +4,6 @@ import {
   submitFormToFirestore,
   getSchedulesFromFirestore,
   deleteScheduleFromFirestore,
-  checkUserExists,
   addUserToFirestore,
   loginWithEmailAndPassword,
   logout,
