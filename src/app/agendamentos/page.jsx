@@ -17,6 +17,7 @@ import { useFormStore } from "@/api/formStore";
 import DeleteModal from "@/components/modules/deleteModal/DeleteModal";
 import DetailsModal from "@/components/modules/detailsModal/DetailsModal";
 import PrivateRoute from "@/components/modules/privateRoute/PrivateRoute";
+import Topbar from "@/components/modules/topbar/Topbar";
 
 const Schedules = () => {
   const { schedules, fetchSchedules, deleteSchedule } = useFormStore();
@@ -82,7 +83,7 @@ const Schedules = () => {
   ]);
 
   const handleNewVisitClick = () => {
-    router.push("/");
+    router.push("/agendar-visitante");
   };
 
   const handleDelete = async (scheduleId) => {
@@ -101,6 +102,7 @@ const Schedules = () => {
 
   return (
     <PrivateRoute>
+      <Topbar />
       <div className="flex justify-center items-start min-h-screen p-6 sm:p-10">
         <div className="max-w-[1200px] w-full">
           <div className="flex items-center justify-between mb-6">

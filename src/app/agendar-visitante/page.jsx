@@ -25,6 +25,7 @@ import { useFormStore } from "@/api/formStore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "@/components/modules/privateRoute/PrivateRoute";
+import Topbar from "@/components/modules/topbar/Topbar";
 
 const VisitorForm = () => {
   const router = useRouter();
@@ -104,6 +105,7 @@ const VisitorForm = () => {
 
   return (
     <PrivateRoute>
+      <Topbar />
       <div className="relative max-w-2xl mx-auto p-4">
         <Card>
           <CardHeader className="border-b-2 border-red-500 pb-4 mx-auto">
