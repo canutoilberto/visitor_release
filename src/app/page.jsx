@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -18,11 +18,18 @@ import { loginWithEmailAndPassword } from "@/api/formUtils";
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); // Alterar de registration para password
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const setUser = useFormStore((state) => state.setUser); // Certifique-se de que está correto
+  const setUser = useFormStore((state) => state.setUser);
+  const user = useFormStore((state) => state.user);
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/agendar-visitante");
+    }
+  }, [user, router]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,8 +37,8 @@ export default function Home() {
     setError("");
     try {
       const user = await loginWithEmailAndPassword(email, password);
-      setUser({ email: user.email, uid: user.uid }); // Atualiza o estado com o usuário
-      router.push("/agendar-visitante"); // Redireciona para a rota de agendar visitante
+      setUser({ email: user.email, uid: user.uid });
+      router.push("/agendar-visitante");
     } catch (err) {
       console.error("Erro ao fazer login:", err.message);
       setError("Erro ao fazer login. Verifique suas credenciais.");
@@ -46,7 +53,7 @@ export default function Home() {
         <CardHeader>
           <CardTitle className="text-2xl">Bem-vindo!</CardTitle>
           <CardDescription>
-            Faça login com sua conta para continuar.
+            Faça login com seu e-mail para continuar.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -64,12 +71,11 @@ export default function Home() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>{" "}
-              {/* Alterar de registration para password */}
+              <Label htmlFor="password">Matrícula</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Sua senha"
+                placeholder="Sua matrícula"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

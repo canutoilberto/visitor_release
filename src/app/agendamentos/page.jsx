@@ -34,13 +34,20 @@ const Schedules = () => {
   const [endDateFilter, setEndDateFilter] = useState("");
 
   const [filteredSchedules, setFilteredSchedules] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     fetchSchedules();
+
+    return () => {
+      setIsMounted(false);
+    };
   }, [fetchSchedules]);
 
   useEffect(() => {
-    // Aplicar os filtros
+    if (!isMounted) return;
+
     const filterSchedules = () => {
       let result = [...schedules];
 
@@ -80,6 +87,7 @@ const Schedules = () => {
     employeeNameFilter,
     startDateFilter,
     endDateFilter,
+    isMounted,
   ]);
 
   const handleNewVisitClick = () => {

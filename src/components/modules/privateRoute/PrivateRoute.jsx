@@ -1,20 +1,28 @@
-"use client";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFormStore } from "@/api/formStore";
+import LoadingSpinner from "@/components/modules/loadingSpinner/LoadingSpinner";
 
 const PrivateRoute = ({ children }) => {
-  const router = useRouter();
   const user = useFormStore((state) => state.user);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
-      router.push("/"); // Redireciona para a página de login se o usuário não estiver autenticado
+      router.push("/");
+    } else {
+      setIsLoading(false);
     }
   }, [user, router]);
 
-  return user ? children : null; // Renderiza os filhos se o usuário estiver autenticado
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user) return null;
+
+  return children;
 };
 
 export default PrivateRoute;

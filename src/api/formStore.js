@@ -6,10 +6,16 @@ import {
   deleteScheduleFromFirestore,
   checkUserExists,
   addUserToFirestore,
-  loginWithEmailAndPassword, // Adicionar a importação aqui se necessário
-  logoutUser, // Se você precisar dessa função também
+  loginWithEmailAndPassword,
+  logoutUser,
 } from "./formUtils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// Função para validar o e-mail
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 
 export const useFormStore = create(
   persist(
@@ -81,6 +87,27 @@ export const useFormStore = create(
         }
       },
       setUser: (user) => set({ user }), // Função para atualizar o estado do usuário
+      login: async (email, password) => {
+        try {
+          const userCredential = await loginWithEmailAndPassword(
+            email,
+            password
+          );
+          const user = userCredential.user;
+          await addUserToFirestore(user.email, user.uid);
+          set({ user: { email: user.email, uid: user.uid } });
+        } catch (error) {
+          throw new Error("Erro ao fazer login: " + error.message);
+        }
+      },
+      logout: async () => {
+        try {
+          await logoutUser();
+          set({ user: null });
+        } catch (error) {
+          throw new Error("Erro ao fazer logout: " + error.message);
+        }
+      },
       listenAuthState: () => {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
@@ -95,7 +122,7 @@ export const useFormStore = create(
     }),
     {
       name: "form-storage",
-      storage: typeof window !== "undefined" ? localStorage : undefined,
+      getStorage: () => localStorage, // Use localStorage para persistir o estado
     }
   )
 );

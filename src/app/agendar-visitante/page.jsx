@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -28,6 +28,12 @@ import PrivateRoute from "@/components/modules/privateRoute/PrivateRoute";
 import Topbar from "@/components/modules/topbar/Topbar";
 
 const VisitorForm = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const router = useRouter();
   const {
     email,
@@ -102,6 +108,10 @@ const VisitorForm = () => {
   const handleNavigateToSchedules = () => {
     router.push("/agendamentos");
   };
+
+  if (!isMounted) {
+    return null; // Ou um indicador de carregamento
+  }
 
   return (
     <PrivateRoute>
@@ -267,40 +277,34 @@ const VisitorForm = () => {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="details">
-                  Observação <span className="text-red-600">*</span>
-                </Label>
+                <Label htmlFor="details">Detalhes adicionais</Label>
                 <Textarea
                   id="details"
                   value={details}
                   onChange={(e) => setFormData("details", e.target.value)}
                   placeholder="Sua resposta"
-                  aria-invalid={errors.details ? "true" : "false"}
                 />
-                {errors.details && (
-                  <div className="text-red-600">{errors.details}</div>
-                )}
               </div>
-              <CardFooter className="flex flex-col sm:flex-row sm:justify-between space-y-2 sm:space-y-0 sm:space-x-2 mt-6">
-                <Button
-                  type="button"
-                  className="w-full bg-gray-600 hover:bg-gray-500"
-                  onClick={handleNavigateToSchedules}
-                >
-                  Ir para Agendamentos
-                </Button>
-                <Button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-500"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Enviando..." : "Enviar"}
-                </Button>
-              </CardFooter>
             </form>
           </CardContent>
+          <CardFooter className="w-full flex flex-col gap-4 sm:flex-row sm:gap-4">
+            <Button
+              type="button"
+              className="w-full bg-cyan-500 hover:bg-cyan-400 text-white"
+              onClick={handleNavigateToSchedules}
+            >
+              Ver Agendamentos
+            </Button>
+            <Button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Enviando..." : "Enviar"}
+            </Button>
+          </CardFooter>
         </Card>
-        <ToastContainer type="success" autoClose={2600} />
+        <ToastContainer />
       </div>
     </PrivateRoute>
   );
