@@ -4,11 +4,11 @@ import {
   submitFormToFirestore,
   getSchedulesFromFirestore,
   deleteScheduleFromFirestore,
-  addUserToFirestore,
+  createUser,
   loginWithEmailAndPassword,
   logout,
+  listenAuthState,
 } from "./formUtils";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Função para validar o e-mail
 const isValidEmail = (email) => {
@@ -30,6 +30,8 @@ export const useFormStore = create(
       details: "",
       schedules: [],
       user: null, // Estado do usuário
+      loading: false,
+      error: null,
       setFormData: (field, value) => set({ [field]: value }),
       fetchSchedules: async () => {
         try {
@@ -86,25 +88,44 @@ export const useFormStore = create(
         }
       },
       setUser: (user) => set({ user }), // Função para atualizar o estado do usuário
+      createUser: async (email, registration) => {
+        set({ loading: true, error: null });
+        try {
+          const user = await createUser(email, registration);
+          set({ user: { email: user.email, uid: user.uid } });
+        } catch (error) {
+          console.error("Erro ao criar usuário: ", error);
+          set({ error: error.message });
+        } finally {
+          set({ loading: false });
+        }
+      },
       login: async (email, password) => {
+        set({ loading: true, error: null });
         try {
           const userCredential = await loginWithEmailAndPassword(
             email,
             password
           );
           const user = userCredential.user;
-          await addUserToFirestore(user.email, user.uid);
           set({ user: { email: user.email, uid: user.uid } });
         } catch (error) {
-          throw new Error("Erro ao fazer login: " + error.message);
+          console.error("Erro ao fazer login: ", error);
+          set({ error: error.message });
+        } finally {
+          set({ loading: false });
         }
       },
       logout: async () => {
+        set({ loading: true, error: null });
         try {
           await logout();
           set({ user: null });
         } catch (error) {
-          throw new Error("Erro ao fazer logout: " + error.message);
+          console.error("Erro ao fazer logout: ", error);
+          set({ error: error.message });
+        } finally {
+          set({ loading: false });
         }
       },
       listenAuthState: () => {

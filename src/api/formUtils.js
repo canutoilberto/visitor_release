@@ -9,12 +9,32 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firebaseApp } from "@/api/firebaseConfig";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const db = getFirestore(firebaseApp);
 const auth = getAuth();
 
-// Função para adicionar ou atualizar um usuário na coleção "users"
+// Funções relacionadas a usuários
+export const createUser = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    console.log("Usuário criado com sucesso:", userCredential.user);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Erro ao criar usuário: ", error);
+    throw new Error("Erro ao criar usuário: " + error.message);
+  }
+};
+
 export const addUserToFirestore = async (email, registration) => {
   try {
     const userDocRef = doc(db, "users", email);
@@ -26,7 +46,6 @@ export const addUserToFirestore = async (email, registration) => {
   }
 };
 
-// Função para verificar se um usuário existe na coleção "users"
 export const checkUserExists = async (email) => {
   try {
     const userDocRef = doc(db, "users", email);
@@ -40,7 +59,7 @@ export const checkUserExists = async (email) => {
   }
 };
 
-// Função para adicionar um formulário à coleção "schedules"
+// Funções relacionadas ao agendamento
 export const submitFormToFirestore = async (formData) => {
   try {
     const docRef = await addDoc(collection(db, "schedules"), formData);
@@ -51,7 +70,6 @@ export const submitFormToFirestore = async (formData) => {
   }
 };
 
-// Função para obter os agendamentos da coleção "schedules"
 export const getSchedulesFromFirestore = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "schedules"));
@@ -66,7 +84,6 @@ export const getSchedulesFromFirestore = async () => {
   }
 };
 
-// Função para excluir um agendamento da coleção "schedules"
 export const deleteScheduleFromFirestore = async (scheduleId) => {
   try {
     const docRef = doc(db, "schedules", scheduleId);
@@ -78,7 +95,7 @@ export const deleteScheduleFromFirestore = async (scheduleId) => {
   }
 };
 
-// Função para login do usuário
+// Funções relacionadas ao login
 export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -93,7 +110,6 @@ export const loginWithEmailAndPassword = async (email, password) => {
   }
 };
 
-// Função para logout do usuário
 export const logout = async () => {
   try {
     await signOut(auth);
