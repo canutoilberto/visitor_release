@@ -22,7 +22,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
         <div id="details-dialog-description" className="grid gap-4 py-4">
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="name" className="text-right">
-              Nome:
+              Visitante:
             </Label>
             <div className="col-span-3">
               <p>{details?.visitorName || "N/A"}</p>
@@ -34,7 +34,6 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             </Label>
             <div className="col-span-3">
               <p>{details?.visitorContact || "N/A"}</p>
-              <p>{details?.email || "N/A"}</p>
             </div>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
@@ -43,6 +42,14 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             </Label>
             <div className="col-span-3">
               <p>{details?.company || "N/A"}</p>
+            </div>
+          </div>
+          <div className="grid items-center grid-cols-4 gap-4">
+            <Label htmlFor="employeeName" className="text-right">
+              Responsável:
+            </Label>
+            <div className="col-span-3">
+              <p>{details?.employeeName || "N/A"}</p>
             </div>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">

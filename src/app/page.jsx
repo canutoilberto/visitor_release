@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFormStore } from "@/api/formStore";
 import { loginWithEmailAndPassword } from "@/api/formUtils";
+import regua from "../../public/regua.png";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -55,11 +56,11 @@ export default function Home() {
       <header className="flex flex-col items-center justify-center py-6 px-4 sm:px-6 md:px-8 lg:px-12 lg:py-8">
         <div className="relative w-full max-w-[450px] lg:max-w-[600px]">
           <Image
-            src="/regua.png"
+            src={regua}
             alt="Registro de visitantes"
-            layout="responsive"
             width={600}
             height={80}
+            priority
             className="rounded-md shadow-md p-4"
           />
         </div>

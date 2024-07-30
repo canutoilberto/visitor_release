@@ -7,13 +7,29 @@ import {
   createUser,
   loginWithEmailAndPassword,
   logout,
-  listenAuthState,
+  addUserToFirestore,
 } from "./formUtils";
+import {
+  getAuth,
+  onAuthStateChanged,
+  getAuth as getAuthInstance,
+} from "firebase/auth";
 
 // Função para validar o e-mail
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+};
+
+// Função para obter o usuário atual
+const getCurrentUser = async () => {
+  const auth = getAuthInstance();
+  const user = auth.currentUser;
+  if (user) {
+    return { email: user.email, uid: user.uid };
+  } else {
+    return null;
+  }
 };
 
 export const useFormStore = create(
@@ -35,8 +51,13 @@ export const useFormStore = create(
       setFormData: (field, value) => set({ [field]: value }),
       fetchSchedules: async () => {
         try {
-          const schedules = await getSchedulesFromFirestore();
-          set({ schedules });
+          const user = get().user;
+          if (user) {
+            const schedules = await getSchedulesFromFirestore(user.uid);
+            set({ schedules });
+          } else {
+            console.error("Usuário não autenticado.");
+          }
         } catch (error) {
           console.error("Erro ao buscar os agendamentos: ", error);
         }
@@ -53,6 +74,7 @@ export const useFormStore = create(
             employeeName: get().employeeName,
             hostContact: get().hostContact,
             details: get().details,
+            userId: get().user?.uid, // Adiciona o ID do usuário aos dados do formulário
           };
 
           if (!isValidEmail(formData.email)) {
@@ -92,6 +114,7 @@ export const useFormStore = create(
         set({ loading: true, error: null });
         try {
           const user = await createUser(email, registration);
+          await addUserToFirestore(email, registration);
           set({ user: { email: user.email, uid: user.uid } });
         } catch (error) {
           console.error("Erro ao criar usuário: ", error);
@@ -134,10 +157,21 @@ export const useFormStore = create(
           if (user) {
             await addUserToFirestore(user.email, user.uid);
             set({ user: { email: user.email, uid: user.uid } });
+            await get().fetchSchedules(); // Atualiza os agendamentos quando o usuário faz login
           } else {
-            set({ user: null });
+            set({ user: null, schedules: [] }); // Limpa os agendamentos quando o usuário faz logout
           }
         });
+      },
+      getCurrentUser: async () => {
+        try {
+          const user = await getCurrentUser();
+          set({ user });
+          return user;
+        } catch (error) {
+          console.error("Erro ao obter o usuário atual: ", error);
+          return null;
+        }
       },
     }),
     {

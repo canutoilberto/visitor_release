@@ -47,7 +47,21 @@ const VisitorForm = () => {
     details,
     setFormData,
     submitForm,
-  } = useFormStore();
+    user,
+  } = useFormStore((state) => ({
+    email: state.email,
+    visitorName: state.visitorName,
+    visitorContact: state.visitorContact,
+    visitDate: state.visitDate,
+    visitTime: state.visitTime,
+    company: state.company,
+    employeeName: state.employeeName,
+    hostContact: state.hostContact,
+    details: state.details,
+    setFormData: state.setFormData,
+    submitForm: state.submitForm,
+    user: state.user,
+  }));
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -84,6 +98,11 @@ const VisitorForm = () => {
       return;
     }
 
+    if (!user) {
+      toast.error("Você precisa estar logado para enviar o formulário.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -97,11 +116,12 @@ const VisitorForm = () => {
       setFormData("employeeName", "");
       setFormData("hostContact", "");
       setFormData("details", "");
+      toast("Agendamento realizado!");
     } catch (error) {
       console.error("Erro ao agendar a visita: ", error);
+      toast.error("Erro ao agendar a visita.");
     } finally {
       setIsSubmitting(false);
-      toast("Agendamento realizado!");
     }
   };
 
@@ -285,24 +305,24 @@ const VisitorForm = () => {
                   placeholder="Sua resposta"
                 />
               </div>
+              <CardFooter className="w-full flex flex-col gap-4 mt-6 sm:flex-row sm:gap-4">
+                <Button
+                  type="button"
+                  className="w-full bg-cyan-500 hover:bg-cyan-400 text-white"
+                  onClick={handleNavigateToSchedules}
+                >
+                  Ver Agendamentos
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Enviando..." : "Enviar"}
+                </Button>
+              </CardFooter>
             </form>
           </CardContent>
-          <CardFooter className="w-full flex flex-col gap-4 sm:flex-row sm:gap-4">
-            <Button
-              type="button"
-              className="w-full bg-cyan-500 hover:bg-cyan-400 text-white"
-              onClick={handleNavigateToSchedules}
-            >
-              Ver Agendamentos
-            </Button>
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Enviando..." : "Enviar"}
-            </Button>
-          </CardFooter>
         </Card>
         <ToastContainer />
       </div>

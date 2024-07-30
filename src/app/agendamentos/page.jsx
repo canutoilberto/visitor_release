@@ -94,10 +94,13 @@ const Schedules = () => {
     router.push("/agendar-visitante");
   };
 
-  const handleDelete = async (scheduleId) => {
+  const handleDelete = async () => {
     try {
-      await deleteSchedule(scheduleId);
-      fetchSchedules(); // Atualize a lista de agendamentos após a exclusão
+      if (selectedScheduleId) {
+        await deleteSchedule(selectedScheduleId);
+        await fetchSchedules(); // Atualize a lista de agendamentos após a exclusão
+        setIsModalOpen(false);
+      }
     } catch (error) {
       console.error("Erro ao excluir o agendamento: ", error);
     }
@@ -116,11 +119,11 @@ const Schedules = () => {
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">Visitas Agendadas</h1>
             <Button
-              size="sm"
+              size="lg"
               className="bg-blue-600 text-white hover:bg-blue-500"
               onClick={handleNewVisitClick}
             >
-              Nova Visita
+              Agendar Visita
             </Button>
           </div>
           <Card>
@@ -183,7 +186,7 @@ const Schedules = () => {
                 </Table>
               ) : (
                 <div className="p-4 text-center text-muted-foreground">
-                  Nenhuma visita agendada...
+                  Você não possui nenhuma visita agendada...
                 </div>
               )}
             </div>
@@ -238,7 +241,7 @@ const Schedules = () => {
                 </div>
               ) : (
                 <div className="p-4 text-center text-muted-foreground">
-                  Nenhuma visita agendada...
+                  Você não possui nenhuma visita agendada...
                 </div>
               )}
             </div>

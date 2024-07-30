@@ -7,6 +7,8 @@ import {
   doc,
   setDoc,
   getDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { firebaseApp } from "@/api/firebaseConfig";
 import {
@@ -70,9 +72,14 @@ export const submitFormToFirestore = async (formData) => {
   }
 };
 
-export const getSchedulesFromFirestore = async () => {
+// Função para obter agendamentos de um usuário específico
+export const getSchedulesFromFirestore = async (userId) => {
   try {
-    const querySnapshot = await getDocs(collection(db, "schedules"));
+    const q = query(
+      collection(db, "schedules"),
+      where("userId", "==", userId) // Filtra os agendamentos pelo ID do usuário
+    );
+    const querySnapshot = await getDocs(q);
     const schedules = [];
     querySnapshot.forEach((doc) => {
       schedules.push({ id: doc.id, ...doc.data() });
