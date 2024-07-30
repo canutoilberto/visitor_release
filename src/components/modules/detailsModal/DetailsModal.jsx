@@ -48,7 +48,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             <Label htmlFor="employeeName" className="text-right">
               Responsável:
             </Label>
-            <div className="col-span-3">
+            <div className="col-span-3 ml-2">
               <p>{details?.employeeName || "N/A"}</p>
             </div>
           </div>
