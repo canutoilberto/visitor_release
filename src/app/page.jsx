@@ -51,23 +51,28 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header with image and title */}
-      <header className="flex flex-col items-center justify-center py-6">
-        <Image
-          src="/regua.png"
-          alt="Registro de visitantes"
-          width={450}
-          height={50}
-          className="rounded-md shadow-md p-4"
-        />
-        <h1 className="text-3xl font-semibold mt-4">Registro de visitantes</h1>
+      <header className="flex flex-col items-center justify-center py-6 px-4 sm:px-6 md:px-8 lg:px-12 lg:py-8">
+        <div className="relative w-full max-w-[450px] lg:max-w-[600px]">
+          <Image
+            src="/regua.png"
+            alt="Registro de visitantes"
+            layout="responsive"
+            width={600}
+            height={80}
+            className="rounded-md shadow-md p-4"
+          />
+        </div>
+        <h1 className="text-3xl font-semibold mt-4 lg:text-4xl">
+          Registro de visitantes
+        </h1>
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex items-center justify-center">
-        <Card className="w-full max-w-md shadow-lg">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12">
+        <Card className="w-full max-w-md shadow-lg lg:max-w-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">Bem-vindo!</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl lg:text-3xl">Bem-vindo!</CardTitle>
+            <CardDescription className="text-base lg:text-lg">
               Faça login com seu e-mail para continuar.
             </CardDescription>
           </CardHeader>
