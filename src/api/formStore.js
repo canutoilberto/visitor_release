@@ -7,7 +7,7 @@ import {
   checkUserExists,
   addUserToFirestore,
   loginWithEmailAndPassword,
-  logoutUser,
+  logout,
 } from "./formUtils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -102,7 +102,7 @@ export const useFormStore = create(
       },
       logout: async () => {
         try {
-          await logoutUser();
+          await logout();
           set({ user: null });
         } catch (error) {
           throw new Error("Erro ao fazer logout: " + error.message);
