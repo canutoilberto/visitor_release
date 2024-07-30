@@ -55,11 +55,11 @@ export default function Home() {
         <Image
           src="/regua.png"
           alt="Registro de visitantes"
-          width={200}
+          width={450}
           height={50}
           className="rounded-md shadow-md p-4"
         />
-        <h1 className="text-3xl font-semibold mt-2">Registro de visitantes</h1>
+        <h1 className="text-3xl font-semibold mt-4">Registro de visitantes</h1>
       </header>
 
       {/* Main content */}
