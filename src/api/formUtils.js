@@ -99,7 +99,8 @@ export const submitFormToFirestore = async (formData) => {
       details: formData.details || "N/A",
       visitDate: formData.visitDate || "N/A", // Adicionado
       visitTime: formData.visitTime || "N/A", // Adicionado
-      userId: formData.userId, // Supondo que userId seja passado no formData
+      hostContact: formData.hostContact || "N/A",
+      visitorContact: formData.visitorContact || "N/A",
     });
     console.log("Documento escrito com ID: ", docRef.id);
   } catch (error) {
