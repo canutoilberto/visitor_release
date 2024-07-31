@@ -324,7 +324,7 @@ const VisitorForm = () => {
             </form>
           </CardContent>
         </Card>
-        <ToastContainer />
+        <ToastContainer autoClose={2000} type="success" />
       </div>
     </PrivateRoute>
   );
