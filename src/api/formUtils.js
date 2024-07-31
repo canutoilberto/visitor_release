@@ -17,11 +17,13 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { format, addDays } from "date-fns"; // Importar a função addDays do date-fns
 
 const db = getFirestore(firebaseApp);
 const auth = getAuth();
 
 // Funções relacionadas a usuários
+
 export const createUser = async (
   email,
   password,
@@ -85,9 +87,20 @@ export const checkUserExists = async (email) => {
 };
 
 // Funções relacionadas ao agendamento
+
 export const submitFormToFirestore = async (formData) => {
   try {
-    const docRef = await addDoc(collection(db, "schedules"), formData);
+    // Verifique se formData contém todos os campos necessários
+    const docRef = await addDoc(collection(db, "schedules"), {
+      visitorName: formData.visitorName || "N/A",
+      visitorContact: formData.visitorContact || "N/A",
+      company: formData.company || "N/A",
+      employeeName: formData.employeeName || "N/A",
+      details: formData.details || "N/A",
+      visitDate: formData.visitDate || "N/A", // Adicionado
+      visitTime: formData.visitTime || "N/A", // Adicionado
+      userId: formData.userId, // Supondo que userId seja passado no formData
+    });
     console.log("Documento escrito com ID: ", docRef.id);
   } catch (error) {
     console.error("Erro ao adicionar documento: ", error);
@@ -96,16 +109,22 @@ export const submitFormToFirestore = async (formData) => {
 };
 
 // Função para obter agendamentos de um usuário específico
+
 export const getSchedulesFromFirestore = async (userId) => {
   try {
-    const q = query(
-      collection(db, "schedules"),
-      where("userId", "==", userId) // Filtra os agendamentos pelo ID do usuário
-    );
+    // Verifique se userId é passado corretamente
+    const q = query(collection(db, "schedules"), where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
     const schedules = [];
     querySnapshot.forEach((doc) => {
-      schedules.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      schedules.push({
+        id: doc.id,
+        ...data,
+        visitDate: data.visitDate
+          ? format(addDays(new Date(data.visitDate), 1), "dd/MM/yyyy")
+          : "N/A", // Ajustar a data
+      });
     });
     return schedules;
   } catch (error) {
@@ -126,6 +145,7 @@ export const deleteScheduleFromFirestore = async (scheduleId) => {
 };
 
 // Funções relacionadas ao login
+
 export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(

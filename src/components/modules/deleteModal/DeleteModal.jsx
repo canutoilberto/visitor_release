@@ -10,6 +10,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 const DeleteModal = ({ isOpen, onClose, onConfirm, scheduleId }) => {
+  const handleConfirm = () => {
+    if (scheduleId) {
+      onConfirm(scheduleId);
+      onClose(); // Fechar o modal após confirmar
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -19,20 +26,12 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, scheduleId }) => {
         <DialogHeader>
           <DialogTitle>Excluir Registro</DialogTitle>
           <DialogDescription id="delete-dialog-description">
-            Tem certeza que deseja excluir este registro? Essa ação não poderá
+            Tem certeza que deseja excluir este registro? Esta ação não poderá
             ser desfeita.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-between">
-          <Button
-            variant="destructive"
-            onClick={() => {
-              if (scheduleId) {
-                onConfirm(scheduleId);
-              }
-              onClose();
-            }}
-          >
+          <Button variant="destructive" onClick={handleConfirm}>
             Excluir
           </Button>
           <Button variant="outline" onClick={onClose}>

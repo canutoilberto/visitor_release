@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -18,10 +19,13 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
       >
         <DialogHeader>
           <DialogTitle>Detalhes da Visita</DialogTitle>
+          <DialogDescription id="dialog-description">
+            Estes são os detalhes
+          </DialogDescription>
         </DialogHeader>
         <div id="details-dialog-description" className="grid gap-4 py-4">
           <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="visitorName" className="text-right">
               Visitante:
             </Label>
             <div className="col-span-3">
@@ -29,7 +33,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             </div>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="contact" className="text-right">
+            <Label htmlFor="visitorContact" className="text-right">
               Contato:
             </Label>
             <div className="col-span-3">
@@ -53,7 +57,7 @@ const DetailsModal = ({ isOpen, onClose, details }) => {
             </div>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="reason" className="text-right">
+            <Label htmlFor="details" className="text-right">
               Motivo:
             </Label>
             <div className="col-span-3">

@@ -246,7 +246,7 @@ const Schedules = () => {
               )}
             </div>
             <CardFooter>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between w-full py-2">
                 <div className="text-sm text-muted-foreground">
                   Mostrando 1-{filteredSchedules.length} de{" "}
                   {filteredSchedules.length} visitas
