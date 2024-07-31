@@ -22,7 +22,13 @@ const db = getFirestore(firebaseApp);
 const auth = getAuth();
 
 // Funções relacionadas a usuários
-export const createUser = async (email, password, isAdmin = false) => {
+export const createUser = async (
+  email,
+  password,
+  name,
+  lastname,
+  isAdmin = false
+) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -31,9 +37,11 @@ export const createUser = async (email, password, isAdmin = false) => {
     );
     const user = userCredential.user;
 
-    // Adicionar o usuário ao Firestore com o campo isAdmin
+    // Adicionar o usuário ao Firestore com os campos name, lastname e isAdmin
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
+      name,
+      lastname,
       registration: password, // Supondo que a senha seja usada como matrícula aqui
       isAdmin,
     });
@@ -49,11 +57,13 @@ export const createUser = async (email, password, isAdmin = false) => {
 export const addUserToFirestore = async (
   email,
   registration,
+  name,
+  lastname,
   isAdmin = false
 ) => {
   try {
     const userDocRef = doc(db, "users", email);
-    await setDoc(userDocRef, { registration, isAdmin });
+    await setDoc(userDocRef, { registration, name, lastname, isAdmin });
     console.log("Usuário adicionado/atualizado com sucesso.");
   } catch (error) {
     console.error("Erro ao adicionar usuário: ", error);

@@ -58,7 +58,7 @@ export const useFormStore = create(
       fetchSchedules: async () => {
         try {
           const user = get().user;
-          if (user) {
+          if (user && user.uid) {
             const schedules = await getSchedulesFromFirestore(user.uid);
             set({ schedules });
           } else {
@@ -116,11 +116,17 @@ export const useFormStore = create(
         }
       },
       setUser: (user) => set({ user }), // Função para atualizar o estado do usuário
-      createUser: async (email, registration) => {
+      createUser: async (email, registration, name, lastname) => {
         set({ loading: true, error: null });
         try {
-          const user = await createUserUtil(email, registration, false); // Adiciona o parâmetro isAdmin com valor false
-          set({ user: { email: user.email, uid: user.uid } });
+          const user = await createUserUtil(
+            email,
+            registration,
+            name,
+            lastname,
+            false
+          ); // Passa todos os parâmetros
+          set({ user: { email: user.email, uid: user.uid, name, lastname } });
         } catch (error) {
           console.error("Erro ao criar usuário: ", error);
           set({ error: error.message });
