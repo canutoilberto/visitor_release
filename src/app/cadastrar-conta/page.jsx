@@ -39,8 +39,8 @@ const CadastrarConta = () => {
       // Chama a função de criar usuário com o e-mail e matrícula
       // Note que o isAdmin é definido como false por padrão na função createUser
       await createUser(email, matricula);
+      // Limpar o formulário apenas se não houver erros
       if (!error) {
-        // Limpar o formulário
         setFirstName("");
         setLastName("");
         setEmail("");
