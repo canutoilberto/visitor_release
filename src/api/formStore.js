@@ -9,11 +9,7 @@ import {
   logout,
   addUserToFirestore,
 } from "./formUtils";
-import {
-  getAuth,
-  onAuthStateChanged,
-  getAuth as getAuthInstance,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Função para validar o e-mail
 const isValidEmail = (email) => {
@@ -23,7 +19,7 @@ const isValidEmail = (email) => {
 
 // Função para obter o usuário atual
 const getCurrentUser = async () => {
-  const auth = getAuthInstance();
+  const auth = getAuth();
   const user = auth.currentUser;
   if (user) {
     return { email: user.email, uid: user.uid };

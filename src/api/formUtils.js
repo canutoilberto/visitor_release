@@ -17,7 +17,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { format, addDays } from "date-fns"; // Importar a função addDays do date-fns
+import { format } from "date-fns";
 
 const db = getFirestore(firebaseApp);
 const auth = getAuth();
@@ -97,10 +97,11 @@ export const submitFormToFirestore = async (formData) => {
       company: formData.company || "N/A",
       employeeName: formData.employeeName || "N/A",
       details: formData.details || "N/A",
-      visitDate: formData.visitDate || "N/A", // Adicionado
-      visitTime: formData.visitTime || "N/A", // Adicionado
-      hostContact: formData.hostContact || "N/A",
+      visitDate: formData.visitDate || "N/A",
+      visitTime: formData.visitTime || "N/A",
+      userId: formData.userId || "N/A",
       visitorContact: formData.visitorContact || "N/A",
+      hostContact: formData.hostContact || "N/A",
     });
     console.log("Documento escrito com ID: ", docRef.id);
   } catch (error) {
@@ -123,8 +124,8 @@ export const getSchedulesFromFirestore = async (userId) => {
         id: doc.id,
         ...data,
         visitDate: data.visitDate
-          ? format(addDays(new Date(data.visitDate), 1), "dd/MM/yyyy")
-          : "N/A", // Ajustar a data
+          ? format(new Date(data.visitDate), "dd/MM/yyyy") // Ajustando formatação
+          : "N/A",
       });
     });
     return schedules;
