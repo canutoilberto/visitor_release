@@ -25,20 +25,11 @@ const CadastrarConta = () => {
   const error = useFormStore((state) => state.error);
   const router = useRouter();
 
-  // Estado para controlar se estamos no lado do cliente
-  const [isClient, setIsClient] = useState(false);
-
-  // useEffect para setar o estado do cliente
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Chama a função de criar usuário com o e-mail e matrícula
-      // Note que o isAdmin é definido como false por padrão na função createUser
-      await createUser(email, matricula);
+      // Chama a função de criar usuário com os novos parâmetros
+      await createUser(email, matricula, firstName, lastName);
       // Limpar o formulário apenas se não houver erros
       if (!error) {
         setFirstName("");
@@ -124,9 +115,7 @@ const CadastrarConta = () => {
               >
                 {loading ? "Aguarde..." : "Criar conta"}
               </Button>
-              {isClient && error && (
-                <p className="text-red-600 mt-2">{error}</p>
-              )}
+              {error && <p className="text-red-600 mt-2">{error}</p>}
             </form>
           </CardContent>
         </Card>
