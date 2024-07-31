@@ -4,7 +4,7 @@ import {
   submitFormToFirestore,
   getSchedulesFromFirestore,
   deleteScheduleFromFirestore,
-  createUser,
+  createUser as createUserUtil,
   loginWithEmailAndPassword,
   logout,
   addUserToFirestore,
@@ -45,7 +45,13 @@ export const useFormStore = create(
       hostContact: "",
       details: "",
       schedules: [],
-      user: null, // Estado do usuário
+      user: {
+        name: "",
+        lastname: "",
+        matricula: "",
+        email: "",
+        isAdmin: false,
+      }, // Estado do usuário
       loading: false,
       error: null,
       setFormData: (field, value) => set({ [field]: value }),
@@ -113,8 +119,7 @@ export const useFormStore = create(
       createUser: async (email, registration) => {
         set({ loading: true, error: null });
         try {
-          const user = await createUser(email, registration);
-          await addUserToFirestore(email, registration);
+          const user = await createUserUtil(email, registration, false); // Adiciona o parâmetro isAdmin com valor false
           set({ user: { email: user.email, uid: user.uid } });
         } catch (error) {
           console.error("Erro ao criar usuário: ", error);
@@ -175,8 +180,7 @@ export const useFormStore = create(
       },
     }),
     {
-      name: "form-storage",
-      getStorage: () => localStorage, // Use localStorage para persistir o estado
+      name: "form-storage", // Use localStorage para persistir o estado
     }
   )
 );

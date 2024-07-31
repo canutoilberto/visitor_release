@@ -36,6 +36,8 @@ const CadastrarConta = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Chama a função de criar usuário com o e-mail e matrícula
+      // Note que o isAdmin é definido como false por padrão na função createUser
       await createUser(email, matricula);
       if (!error) {
         // Limpar o formulário
@@ -43,7 +45,7 @@ const CadastrarConta = () => {
         setLastName("");
         setEmail("");
         setMatricula("");
-        // Redirecionar para a rota "/"
+        // Redirecionar para a rota "/agendamentos"
         router.push("/agendamentos");
       }
     } catch (err) {
