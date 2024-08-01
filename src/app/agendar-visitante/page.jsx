@@ -308,18 +308,18 @@ const VisitorForm = () => {
               <CardFooter className="w-full flex flex-col gap-4 mt-6 sm:flex-row sm:gap-4">
                 <Button
                   type="button"
-                  className="w-full bg-cyan-500 hover:bg-cyan-400 text-white"
+                  className="w-full font-semibold bg-cyan-600 hover:bg-cyan-500 text-white"
                   onClick={handleNavigateToSchedules}
                   disabled={isSubmitting}
                 >
-                  Ver Agendamentos
+                  VER AGENDAMENTOS
                 </Button>
                 <Button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+                  className="w-full font-semibold bg-blue-600 hover:bg-blue-500 text-white"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Enviando..." : "Enviar"}
+                  {isSubmitting ? "ENVIANDO..." : "ENVIAR"}
                 </Button>
               </CardFooter>
             </form>
