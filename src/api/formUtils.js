@@ -17,7 +17,6 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { format } from "date-fns";
 
 const db = getFirestore(firebaseApp);
 const auth = getAuth();
@@ -100,7 +99,6 @@ export const submitFormToFirestore = async (formData) => {
       visitDate: formData.visitDate || "N/A",
       visitTime: formData.visitTime || "N/A",
       userId: formData.userId || "N/A",
-      visitorContact: formData.visitorContact || "N/A",
       hostContact: formData.hostContact || "N/A",
     });
     console.log("Documento escrito com ID: ", docRef.id);
@@ -123,9 +121,7 @@ export const getSchedulesFromFirestore = async (userId) => {
       schedules.push({
         id: doc.id,
         ...data,
-        visitDate: data.visitDate
-          ? format(new Date(data.visitDate), "dd/MM/yyyy") // Ajustando formatação
-          : "N/A",
+        visitDate: data.visitDate || "N/A", // Não altera a data, mantém como está
       });
     });
     return schedules;
