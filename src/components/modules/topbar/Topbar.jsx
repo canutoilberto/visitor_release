@@ -32,12 +32,12 @@ const Topbar = () => {
         <div className="text-lg font-medium">Registro de visitantes</div>
         <Button
           variant="ghost"
-          size="icon"
-          className="rounded-full"
+          size="sm"
+          className="rounded p-4 flex gap-1 items-center justify-center"
           onClick={handleLogout}
         >
           <MdOutlineLogout className="h-5 w-5 text-muted-foreground" />
-          <span className="sr-only">Sair</span>
+          <span className="text-sm">Sair</span>
         </Button>
       </div>
     </header>
