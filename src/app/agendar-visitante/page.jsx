@@ -310,6 +310,7 @@ const VisitorForm = () => {
                   type="button"
                   className="w-full bg-cyan-500 hover:bg-cyan-400 text-white"
                   onClick={handleNavigateToSchedules}
+                  disabled={isSubmitting}
                 >
                   Ver Agendamentos
                 </Button>
