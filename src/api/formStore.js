@@ -11,12 +11,6 @@ import {
 } from "./formUtils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-// Função para validar o e-mail
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
 // Função para obter o usuário atual
 const getCurrentUser = async () => {
   const auth = getAuth();
@@ -78,11 +72,6 @@ export const useFormStore = create(
             details: get().details,
             userId: get().user?.uid, // Adiciona o ID do usuário aos dados do formulário
           };
-
-          if (!isValidEmail(formData.email)) {
-            alert("O e-mail do visitante não é válido.");
-            return;
-          }
 
           const existingSchedule = get().schedules.find(
             (schedule) =>
