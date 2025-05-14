@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useFormStore } from "@/api/formStore";
 import { MdOutlineLogout } from "react-icons/md";
-import Logo from "../../../../public/logo.png";
+import Logo from "../../../../public/logo-small-2.webp";
 import Image from "next/image";
 
 const Topbar = () => {
